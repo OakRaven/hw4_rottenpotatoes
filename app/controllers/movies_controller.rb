@@ -1,5 +1,15 @@
 class MoviesController < ApplicationController
 
+  def find_similar_movies
+    movie = Movie.find(params[:id])
+    if movie && movie.director && movie.director.size > 0
+      @movies = Movie.find_similar_movies(params[:id])
+    else
+      flash[:notice] = "'#{movie.title}' has no director info"
+      redirect_to :root
+    end
+  end
+
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
